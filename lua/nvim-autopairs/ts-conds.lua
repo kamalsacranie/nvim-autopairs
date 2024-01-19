@@ -147,4 +147,15 @@ conds.is_not_ts_node_comment = function()
     end
 end
 
+conds.is_not_in_context = function()
+    return function()
+        local rules = require("nvim-autopairs").get_buf_rules()
+        for _, rule in pairs(rules) do
+            local context = require("nvim-autopairs.ts-utils")
+                .get_language_tree_at_position({ utils.get_cursor() })
+            return vim.tbl_contains(rule.filetypes, context:lang())
+        end
+    end
+end
+
 return conds
